@@ -27,7 +27,7 @@ Updated March 30, 2019
 
 ----------
 
-- Added Edit 
-- Added Delete 
+- Added Edit function 
+- Added Delete function 
 - Added error message display 
 - Adjusted migration (string length)
