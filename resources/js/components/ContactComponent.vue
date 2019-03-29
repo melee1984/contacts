@@ -16,7 +16,6 @@
                     </div>
                 </div>
 
-                {{ error }}
                 <!-- Option to Add --> 
                 <div class="form-upload-card" v-if="addAction">
                  <div class="card-body">
@@ -195,6 +194,9 @@
                         else {
                         }
                      });
+                }
+                else {
+                    // message should be here 
                 }
                 
             },

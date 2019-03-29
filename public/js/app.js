@@ -1883,7 +1883,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1944,6 +1943,7 @@ __webpack_require__.r(__webpack_exports__);
             self.errors = error.response.data.errors || {};
           } else {}
         });
+      } else {// message should be here 
       }
     },
     deleteRecord: function deleteRecord() {// alert('Delete is not yet available');
@@ -37097,7 +37097,6 @@ var render = function() {
           ])
         ])
       ]),
-      _vm._v("\n\n            " + _vm._s(_vm.error) + "\n            "),
       _vm._v(" "),
       _vm.addAction
         ? _c("div", { staticClass: "form-upload-card" }, [
