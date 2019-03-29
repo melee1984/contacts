@@ -22,7 +22,8 @@ class RequestController extends Controller
 		foreach($rs as $list) {
 
 			$data = array();
-
+			
+			$data['id'] = $list->id;
 			$data['name'] = $list->name;
 			$data['email'] = $list->email;
 			$data['phone'] = $list->phone;
@@ -38,8 +39,27 @@ class RequestController extends Controller
 
 	}
 
-	public function show($id) {
-        return Phonebook::find($id);
+	public function update(Request $request) {
+        
+        $input = $request->all();
+
+		$data = array();
+		$dataExaminee = array();
+
+		$request->validate(['name' => 'required',
+		            'phone' => 'required',
+		            'email' => 'required|email',
+		            'country' => 'required',
+		            'city' => 'required']
+		       );
+
+		$status = Phonebook::updateRecord($request);
+
+		if ($status)  {
+			
+		}
+
+    	return $this->index();
     }
 
     public function store(Request $request) {
@@ -66,7 +86,7 @@ class RequestController extends Controller
 
     }
 
-    public function delete(Request $request, $id){
+    public function destroy(Request $request, $id){
 
     		$rs = Phonebook::find($id);
     		$rs->delete();

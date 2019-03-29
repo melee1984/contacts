@@ -23,3 +23,5 @@ Route::get('/', 'HomeController@index');
 // API 
 Route::get('api/request', 'RequestController@index');
 Route::post('api/request/submit', 'RequestController@store');
+Route::post('api/request/delete/{id}', 'RequestController@destroy');
+Route::post('api/request/update/submit', 'RequestController@update');

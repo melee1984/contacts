@@ -16,13 +16,13 @@ class CreatePhonebookTable extends Migration
         Schema::create('phonebook', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('name');
+            $table->string('name',75);
             $table->string('email')->unique();
-            $table->string('phone');
-            $table->string('country');
-            $table->string('city');
-            $table->string('state');
-            $table->string('postal_code');
+            $table->string('phone',15);
+            $table->string('country', 30);
+            $table->string('city', 30);
+            $table->string('state',2);
+            $table->string('postal_code',5);
 
             $table->softDeletes();
              $table->timestamps();

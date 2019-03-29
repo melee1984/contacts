@@ -1,6 +1,8 @@
 
 ## TEST PHONEBOOK 
 
+Updated March 29, 2019
+
 
 1.) Create migration for Phonebook 
 2.) Create theme 
@@ -18,3 +20,14 @@ Tools:
 4.) Json
 5.) Bootstrap for my theme
 
+
+----------
+
+Updated March 30, 2019
+
+----------
+
+- Added Edit 
+- Added Delete 
+- Added error message display 
+- Adjusted migration (string length)

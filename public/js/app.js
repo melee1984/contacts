@@ -1883,6 +1883,78 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1895,11 +1967,22 @@ __webpack_require__.r(__webpack_exports__);
         state: '',
         postal_code: ''
       },
+      fillfields: {
+        id: '',
+        name: '',
+        email: '',
+        phone: '',
+        country: '',
+        city: '',
+        state: '',
+        postal_code: ''
+      },
       addAction: false,
       editAction: false,
       mPhonebook: false,
+      displayMessage: '',
       loading: true,
-      errors: {},
+      errors: [],
       data: []
     };
   },
@@ -1927,26 +2010,68 @@ __webpack_require__.r(__webpack_exports__);
       this.addAction = true;
     },
     closeForm: function closeForm() {
-      var self = this;
-      self.addAction = false;
+      this.addAction = false;
+      this.editAction = false;
     },
     submitRecord: function submitRecord() {
-      var self = this;
-      self.errors = {};
+      var _this = this;
 
-      if (this.validateFields(self.fields)) {
-        axios.post('/api/request/submit', self.fields).then(function (response) {
-          self.data = response.data.record;
-          self.addAction = false;
+      this.errors = [];
+
+      if (this.validateFields(this.fields)) {
+        axios.post('/api/request/submit', this.fields).then(function (response) {
+          _this.data = response.data.record;
+          _this.addAction = false;
         }).catch(function (error) {
           if (error.response.status === 422) {
-            self.errors = error.response.data.errors || {};
+            _this.errors = error.response.data.errors;
           } else {}
         });
-      } else {// message should be here 
-      }
+      } else {}
     },
-    deleteRecord: function deleteRecord() {// alert('Delete is not yet available');
+    updateRecord: function updateRecord() {
+      var _this2 = this;
+
+      this.errors = {};
+
+      if (this.validateFields(this.fillfields)) {
+        axios.post('/api/request/update/submit', this.fillfields).then(function (response) {
+          _this2.data = response.data.record;
+          _this2.editAction = false;
+        }).catch(function (error) {
+          if (error.response.status === 422) {
+            _this2.errors = error.response.data.errors || {};
+          } else {}
+        });
+      } else {}
+    },
+    editRecord: function editRecord(item) {
+      this.fillfields.id = item.id;
+      this.fillfields.name = item.name;
+      this.fillfields.email = item.email;
+      this.fillfields.phone = item.phone;
+      this.fillfields.country = item.country;
+      this.fillfields.city = item.city;
+      this.fillfields.state = item.state;
+      this.fillfields.postal_code = item.postal_code;
+      this.editAction = true;
+    },
+    deleteRecord: function deleteRecord(item) {
+      var _this3 = this;
+
+      this.errors = {};
+      var r = confirm("Are you sure want to delete " + item.name);
+
+      if (r == true) {
+        axios.post('/api/request/delete/' + item.id).then(function (response) {
+          _this3.data = response.data.record;
+          _this3.addAction = false;
+        }).catch(function (error) {
+          if (error.response.status === 422) {
+            _this3.errors = error.response.data.errors || {};
+          } else {}
+        });
+      }
     },
     validateFields: function validateFields(obj) {
       if (obj.name == "") {
@@ -1957,9 +2082,12 @@ __webpack_require__.r(__webpack_exports__);
       if (obj.email == "") {
         alert('Please enter Email.');
         return false;
-      } // should loop in here 
-      //
+      }
 
+      if (obj.phone == "") {
+        alert('Please enter Phone.');
+        return false;
+      }
 
       return true;
     }
@@ -37098,6 +37226,19 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
+      _vm.errors.length > 0
+        ? _c("div", [
+            _c(
+              "ul",
+              { staticClass: "alert alert-danger" },
+              _vm._l(_vm.errors, function(value, key, index) {
+                return _c("li", [_vm._v(_vm._s(value))])
+              }),
+              0
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _vm.addAction
         ? _c("div", { staticClass: "form-upload-card" }, [
             _c("div", { staticClass: "card-body" }, [
@@ -37134,7 +37275,13 @@ var render = function() {
                         _vm.$set(_vm.fields, "name", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.name
+                    ? _c("span", { class: ["text-danger"] }, [
+                        _vm._v("@" + _vm._s(_vm.errors.name[0]))
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group mb-2" }, [
@@ -37169,7 +37316,13 @@ var render = function() {
                         _vm.$set(_vm.fields, "email", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.email
+                    ? _c("span", { class: ["text-danger"] }, [
+                        _vm._v("@" + _vm._s(_vm.errors.email[0]))
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group mb-2" }, [
@@ -37204,7 +37357,13 @@ var render = function() {
                         _vm.$set(_vm.fields, "phone", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.phone
+                    ? _c("span", { class: ["text-danger"] }, [
+                        _vm._v("@" + _vm._s(_vm.errors.phone[0]))
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group mb-2" }, [
@@ -37239,7 +37398,13 @@ var render = function() {
                         _vm.$set(_vm.fields, "country", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.country
+                    ? _c("span", { class: ["text-danger"] }, [
+                        _vm._v("@" + _vm._s(_vm.errors.country[0]))
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group mb-2" }, [
@@ -37261,7 +37426,7 @@ var render = function() {
                     staticClass: "form-control",
                     attrs: {
                       type: "text",
-                      name: "phone",
+                      name: "city",
                       value: "",
                       placeholder: "City"
                     },
@@ -37274,7 +37439,13 @@ var render = function() {
                         _vm.$set(_vm.fields, "city", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.city
+                    ? _c("span", { class: ["text-danger"] }, [
+                        _vm._v("@" + _vm._s(_vm.errors.city[0]))
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group mb-2" }, [
@@ -37309,7 +37480,13 @@ var render = function() {
                         _vm.$set(_vm.fields, "state", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.state
+                    ? _c("span", { class: ["text-danger"] }, [
+                        _vm._v("@" + _vm._s(_vm.errors.state[0]))
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group mb-2" }, [
@@ -37344,7 +37521,13 @@ var render = function() {
                         _vm.$set(_vm.fields, "postal_code", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.postal_code
+                    ? _c("span", { class: ["text-danger"] }, [
+                        _vm._v("@" + _vm._s(_vm.errors.postal_code[0]))
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c("br"),
@@ -37361,6 +37544,300 @@ var render = function() {
                     }
                   },
                   [_vm._v("Add")]
+                ),
+                _vm._v(" \n                  "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary sr-2",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.closeForm()
+                      }
+                    }
+                  },
+                  [_vm._v("Cancel")]
+                )
+              ])
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.editAction
+        ? _c("div", { staticClass: "form-upload-card" }, [
+            _c("div", { staticClass: "card-body" }, [
+              _c("form", { staticClass: "form" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.fillfields.id,
+                      expression: "fillfields.id"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "hidden", name: "id" },
+                  domProps: { value: _vm.fillfields.id },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.fillfields, "id", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group mb-2" }, [
+                  _c(
+                    "label",
+                    { staticClass: "sr-only", attrs: { for: "name" } },
+                    [_vm._v("Name")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fillfields.name,
+                        expression: "fillfields.name"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "name", placeholder: "Name" },
+                    domProps: { value: _vm.fillfields.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.fillfields, "name", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group mb-2" }, [
+                  _c(
+                    "label",
+                    { staticClass: "sr-only", attrs: { for: "email" } },
+                    [_vm._v("Email Address")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fillfields.email,
+                        expression: "fillfields.email"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "email",
+                      placeholder: "Email Address"
+                    },
+                    domProps: { value: _vm.fillfields.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.fillfields, "email", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group mb-2" }, [
+                  _c(
+                    "label",
+                    { staticClass: "sr-only", attrs: { for: "phone" } },
+                    [_vm._v("Phone")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fillfields.phone,
+                        expression: "fillfields.phone"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "phone",
+                      placeholder: "Phone"
+                    },
+                    domProps: { value: _vm.fillfields.phone },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.fillfields, "phone", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group mb-2" }, [
+                  _c(
+                    "label",
+                    { staticClass: "sr-only", attrs: { for: "country" } },
+                    [_vm._v("Country")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fillfields.country,
+                        expression: "fillfields.country"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "country",
+                      placeholder: "Country"
+                    },
+                    domProps: { value: _vm.fillfields.country },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.fillfields, "country", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group mb-2" }, [
+                  _c(
+                    "label",
+                    { staticClass: "sr-only", attrs: { for: "city" } },
+                    [_vm._v("City")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fillfields.city,
+                        expression: "fillfields.city"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "phone", placeholder: "City" },
+                    domProps: { value: _vm.fillfields.city },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.fillfields, "city", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group mb-2" }, [
+                  _c(
+                    "label",
+                    { staticClass: "sr-only", attrs: { for: "state" } },
+                    [_vm._v("State")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fillfields.state,
+                        expression: "fillfields.state"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "state",
+                      placeholder: "State"
+                    },
+                    domProps: { value: _vm.fillfields.state },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.fillfields, "state", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group mb-2" }, [
+                  _c(
+                    "label",
+                    { staticClass: "sr-only", attrs: { for: "postal_code" } },
+                    [_vm._v("Postal Code")]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fillfields.postal_code,
+                        expression: "fillfields.postal_code"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      name: "postal_code",
+                      placeholder: "Portal Code"
+                    },
+                    domProps: { value: _vm.fillfields.postal_code },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.fillfields,
+                          "postal_code",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary sr-2",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.updateRecord()
+                      }
+                    }
+                  },
+                  [_vm._v("Update")]
                 ),
                 _vm._v(" \n                  "),
                 _c(
@@ -37440,7 +37917,14 @@ var render = function() {
                             ? _c("td", [
                                 _c(
                                   "a",
-                                  { attrs: { href: "javascript:void(0)" } },
+                                  {
+                                    attrs: { href: "javascript:void(0)" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.editRecord(list)
+                                      }
+                                    }
+                                  },
                                   [_vm._v("Edit")]
                                 ),
                                 _vm._v(
@@ -37452,7 +37936,7 @@ var render = function() {
                                     attrs: { href: "javascript:void(0)" },
                                     on: {
                                       click: function($event) {
-                                        return _vm.deleteRecord()
+                                        return _vm.deleteRecord(list)
                                       }
                                     }
                                   },
